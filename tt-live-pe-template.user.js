@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         tt-live-pe-template
 // @namespace    pe-template-inner
-// @version      1.0
+// @version      1.1
 // @description  PE模板工具
 // @author       whb
 // @match        https://data.bytedance.net/dorado/*
@@ -128,19 +128,47 @@
 //                 return `帮我快速梳理并读懂当前SQL任务逻辑，严格按下面5点结构化输出 1. 5句话以内概括整体业务目标 2. 按层级逐一拆解每个CTE或者子查询的作用与产出 3. 梳理清楚输入源表、中间层、最终输出表，画出完整数据流向 4. 明确标出代码里过滤条件、Join关联、聚合逻辑、窗口函数四个关键处理点 5. 结合业务和SQL写法，列出最容易踩坑的5个风险点和注意事项。`;
 //             }
 //         },
+         demand_clarification: {
+            sceneName: "需求澄清",
+            desc: `按照当前任务澄清需求`,
+            inputs: [
+                { key: "fillback_region", label: "澄清知识库", type: "checkbox", options: ["多人", "公会", "活动", "游戏"] },
+                { key: "fillback_date", label: "澄清日期" },
+                { key: "fillback_num", label: "澄清并发" }
+            ],
+            buildText: function(form) {
+                let { fillback_region, fillback_date, fillback_num } = form;
+                let content = `任务：你需要根据当前Global任务去定位对应的va、sg、US-EastRed、US- TTP的本地任务，然后对任务进行回溯。回溯机房：${fillback_region};回溯周期：${fillback_date};回溯并发：${fillback_num}`;
+                return content;
+            }
+        },
+        model_design: {
+            sceneName: "模型设计",
+            desc: `按照当前任务设计模型`,
+            inputs: [
+                { key: "fillback_region", label: "澄清知识库", type: "checkbox", options: ["多人", "公会", "活动", "游戏"] },
+                { key: "fillback_date", label: "设计日期" },
+                { key: "fillback_num", label: "设计并发" }
+            ],
+            buildText: function(form) {
+                let { fillback_region, fillback_date, fillback_num } = form;
+                let content = `任务：你需要根据当前Global任务去定位对应的va、sg、US-EastRed、US- TTP的本地任务，然后对任务进行回溯。回溯机房：${fillback_region};回溯周期：${fillback_date};回溯并发：${fillback_num}`;
+                return content;
+            }
+        },
 
-//         mysql2hive: {
-//             sceneName: "MySQL2Hive",
-//             desc: `将MySQL库表全量同步到Hive库表，无需修改逻辑。`,
-//             inputs: [
-//                 { key: "mysqlTable", label: "MySQL源表(库名.表名)" },
-//                 { key: "hiveTable", label: "Hive目标表(库名.表名)" }
-//             ],
-//             buildText: function(form) {
-//                 let { mysqlTable, hiveTable } = form;
-//                 return `基于MySQL的${mysqlTable}同步到Hive的${hiveTable}。`;
-//             }
-//         },
+        mysql2hive: {
+            sceneName: "MySQL2Hive",
+            desc: `将MySQL库表全量同步到Hive库表，无需修改逻辑。`,
+            inputs: [
+                { key: "mysqlTable", label: "MySQL源表(库名.表名)" },
+                { key: "hiveTable", label: "Hive目标表(库名.表名)" }
+            ],
+            buildText: function(form) {
+                let { mysqlTable, hiveTable } = form;
+                return `基于MySQL的${mysqlTable}同步到Hive的${hiveTable}。`;
+            }
+        },
 
 //         optimize_param: {
 //             sceneName: "参数优化",
@@ -245,26 +273,22 @@
 
     // 场景分组配置
     const SCENE_GROUPS = [
-        // {
-        //     groupName: "DTS任务",
-        //     keys: ["mysql2hive", "larksheet2hive"]
-        // },
-        // {
-        //     groupName: "知识检索",
-        //     keys: ["quick_understand_task"]
-        // },
-        // {
-        //     groupName: "优化运维",
-        //     keys: ["optimize_param", "optimize_logic", "format_code", "full_code_format", "create_fill_back"]
-        // },
+        {
+            groupName: "需求理解",
+            keys: ["demand_clarification", "model_design"]
+        },
         {
             groupName: "数据开发",
-            keys: ["hive_edit_caliber", "copy_exist_task", "aeolus_to_hive", "hive_add_column", "create_hive_sql_task"]
+            keys: ["mysql2hive","hive_edit_caliber", "copy_exist_task", "aeolus_to_hive", "hive_add_column", "create_hive_sql_task"]
         },
         {
             groupName: "任务运维",
             keys: ["create_fill_back"]
-        }
+        },
+        {
+            groupName: "DECC场景",
+            keys: []
+        },
     ];
 
     // ==================== 样式（根据站点自动切换亮色/暗色主题）====================
