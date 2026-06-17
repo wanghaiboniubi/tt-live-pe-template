@@ -10,8 +10,8 @@
 // @match        https://aide.tiktok-row.net/*
 // @grant        GM_addStyle
 // @license      MIT
-// @downloadURL  https://code.byted.org/live/Prompt_Engineering_Live/raw/main/tt-live-pe-template.user.js
-// @updateURL    https://code.byted.org/live/Prompt_Engineering_Live/raw/main/tt-live-pe-template.meta.js
+// @downloadURL  https://github.com/wanghaiboniubi/tt-live-pe-template/raw/refs/heads/main/tt-live-pe-template.user.js
+// @updateURL    https://github.com/wanghaiboniubi/tt-live-pe-template/raw/refs/heads/main/tt-live-pe-template.meta.js
 // ==/UserScript==
 (function() {
     'use strict';
