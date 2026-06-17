@@ -1,0 +1,18 @@
+tt-live-pe-template.user.js
+  h_3fab7675978727 4,131-158,277-279,282,287-291
+tt-live-pe-template.meta.js
+  h_3fab7675978727 4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "394aaf06f8206ff84963696d024919dd9650409c",
+  "prompts": {},
+  "humans": {
+    "h_3fab7675978727": {
+      "author": "ByteDance User <bytedance@bytedance.com>"
+    }
+  },
+  "attestation_metadata": {},
+  "remote_transcripts": {}
+}
