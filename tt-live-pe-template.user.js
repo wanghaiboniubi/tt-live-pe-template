@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         tt-live-pe-template
 // @namespace    pe-template-inner
-// @version      1.2
+// @version      1.3
 // @description  PE模板工具
 // @author       whb
 // @match        https://data.bytedance.net/dorado/*
@@ -274,7 +274,7 @@
 按 local 表、涉及源机房、传输方式、detect_uv、Decc 表等信息完成创建。`,
             inputs: [
                 { key: "localTable", label: "local表名" },
-                { key: "sourceRegion", label: "涉及源机房", type: "select", options: ["SG", "EU", "US"] },
+                { key: "sourceRegion", label: "涉及源机房", type: "checkbox", options: ["SG", "EU", "US"] },
                 { key: "transferMode", label: "传输方式", type: "select", options: ["Agg有损传输", "Default无损传输"] },
                 { key: "detectUv", label: "detect_uv字段名(可不填)" },
                 { key: "deccTable", label: "Decc表名" }
