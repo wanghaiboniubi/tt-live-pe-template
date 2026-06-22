@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         tt-live-pe-template
 // @namespace    pe-template-inner
-// @version      1.1
+// @version      1.2
 // @description  PE模板工具
 // @author       whb
 // @match        https://data.bytedance.net/dorado/*
@@ -50,75 +50,75 @@
             }
         },
 
-//         larksheet2hive: {
-//             sceneName: "larksheet2hive",
-//             desc: `业务规则说明：
-// 创建 larksheet2hive 同步任务，将飞书表格/多维表格数据同步到 Hive 表。
-// 需要提供：larksheet链接、目标hive表名。`,
-//             inputs: [
-//                 { key: "larksheetUrl", label: "飞书表格链接" },
-//                 { key: "hiveTable", label: "目标Hive表名" }
-//             ],
-//             buildText: function(form) {
-//                 let { larksheetUrl, hiveTable } = form;
-//                 return `建 larksheet2hive 任务，larksheet链接为：${larksheetUrl}，hive表为：${hiveTable}`;
-//             }
-//         },
+        larksheet2hive: {
+            sceneName: "larksheet2hive",
+            desc: `业务规则说明：
+创建 larksheet2hive 同步任务，将飞书表格/多维表格数据同步到 Hive 表。
+需要提供：larksheet链接、目标hive表名。`,
+            inputs: [
+                { key: "larksheetUrl", label: "飞书表格链接" },
+                { key: "hiveTable", label: "目标Hive表名" }
+            ],
+            buildText: function(form) {
+                let { larksheetUrl, hiveTable } = form;
+                return `建 larksheet2hive 任务，larksheet链接为：${larksheetUrl}，hive表为：${hiveTable}`;
+            }
+        },
 
-//         copy_exist_task: {
-//             sceneName: "复制已有任务",
-//             desc: `复制现有任务并创建新任务。
-// 规则：
-// 1.不填新任务名 → 默认原任务名 + _copy
-// 2.不填新插入表 → 默认与原表一致
-// 3.自动补齐字段、更新依赖、比对代码确保一致`,
-//             inputs: [
-//                 { key: "taskId", label: "任务ID(可不填)" },
-//                 { key: "newTaskName", label: "新任务名称(可不填)" },
-//                 { key: "newTargetTable", label: "新任务插入表名(可不填)" },
-//                 { key: "caliberId", label: "数据源参考口径ID(可不填)" }
-//             ],
-//             buildText: function(form) {
-//                 let { taskId, newTaskName, newTargetTable, caliberId } = form;
-//                 let text = "复制现有任务";
+        copy_exist_task: {
+            sceneName: "复制已有任务",
+            desc: `复制现有任务并创建新任务。
+规则：
+1.不填新任务名 → 默认原任务名 + _copy
+2.不填新插入表 → 默认与原表一致
+3.自动补齐字段、更新依赖、比对代码确保一致`,
+            inputs: [
+                { key: "taskId", label: "任务ID(可不填)" },
+                { key: "newTaskName", label: "新任务名称(可不填)" },
+                { key: "newTargetTable", label: "新任务插入表名(可不填)" },
+                { key: "caliberId", label: "数据源参考口径ID(可不填)" }
+            ],
+            buildText: function(form) {
+                let { taskId, newTaskName, newTargetTable, caliberId } = form;
+                let text = "复制现有任务";
 
-//                 if (taskId && taskId.trim()) {
-//                     text += `${taskId}`;
-//                 }
-//                 text += "并创建一个新任务。";
+                if (taskId && taskId.trim()) {
+                    text += `${taskId}`;
+                }
+                text += "并创建一个新任务。";
 
-//                 if (newTaskName && newTaskName.trim()) {
-//                     text += `新任务名称为：${newTaskName}；`;
-//                 } else {
-//                     text += "新任务名称使用原任务名后追加"_copy"；";
-//                 }
+                if (newTaskName && newTaskName.trim()) {
+                    text += `新任务名称为：${newTaskName}；`;
+                } else {
+                    text += "新任务名称使用原任务名后追加_copy";
+                }
 
-//                 if (newTargetTable && newTargetTable.trim()) {
-//                     text += `新任务插入的表名为：${newTargetTable}。`;
-//                 } else {
-//                     text += "新任务插入表名使用与原任务一致的插入表名。";
-//                 }
+                if (newTargetTable && newTargetTable.trim()) {
+                    text += `新任务插入的表名为：${newTargetTable}。`;
+                } else {
+                    text += "新任务插入表名使用与原任务一致的插入表名。";
+                }
 
-//                 if (caliberId && caliberId.trim()) {
-//                     text += `数据源参考口径${caliberId}。`;
-//                 } else {
-//                     text += "";
-//                 }
+                if (caliberId && caliberId.trim()) {
+                    text += `数据源参考口径${caliberId}。`;
+                } else {
+                    text += "";
+                }
 
-//                 text += `要求 1、更新新任务的依赖关系 2、对新任务代码与原任务代码进行比对，确保一致性和发现差异 3、不需要代码审查，不需要知识库召回，不需要调用skill，快速复制。`;
+                text += `要求 1、更新新任务的依赖关系 2、对新任务代码与原任务代码进行比对，确保一致性和发现差异 3、不需要代码审查，不需要知识库召回，不需要调用skill，快速复制。`;
 
-//                 return text;
-//             }
-//         },
+                return text;
+            }
+        },
 
-//         format_code: {
-//             sceneName: "修改代码格式化",
-//             desc: `智能格式化Hive SQL代码，保持原有风格不变，未修改的行不进行格式化，仅规范化缩进、空格、换行。`,
-//             inputs: [],
-//             buildText: function() {
-//                 return `请格式化当前代码，要求1. 保持原有代码风格、关键字大小写完全不变 2. 未修改的行禁止重新格式化 3. 仅规范化缩进、空格、逗号、换行格式 4. 不改变代码逻辑与执行结果。`;
-//             }
-//         },
+        format_code: {
+            sceneName: "修改代码格式化",
+            desc: `智能格式化Hive SQL代码，保持原有风格不变，未修改的行不进行格式化，仅规范化缩进、空格、换行。`,
+            inputs: [],
+            buildText: function() {
+                return `请格式化当前代码，要求1. 保持原有代码风格、关键字大小写完全不变 2. 未修改的行禁止重新格式化 3. 仅规范化缩进、空格、逗号、换行格式 4. 不改变代码逻辑与执行结果。`;
+            }
+        },
 
 //         quick_understand_task: {
 //             sceneName: "快速熟悉任务逻辑",
@@ -132,13 +132,16 @@
             sceneName: "需求澄清",
             desc: `按照当前任务澄清需求`,
             inputs: [
-                { key: "fillback_region", label: "澄清知识库", type: "checkbox", options: ["多人", "公会", "活动", "游戏"] },
-                { key: "fillback_date", label: "澄清日期" },
-                { key: "fillback_num", label: "澄清并发" }
+                { key: "clarificationKnowledge", label: "澄清知识库", type: "checkbox", options: ["多人", "公会", "活动", "游戏"] },
+                { key: "clarificationSkill", label: "澄清Skill", type: "checkbox", options: ["多人", "公会", "活动", "游戏"] },
+                { key: "clarificationRequirement", label: "澄清要求" }
             ],
             buildText: function(form) {
-                let { fillback_region, fillback_date, fillback_num } = form;
-                let content = `任务：你需要根据当前Global任务去定位对应的va、sg、US-EastRed、US- TTP的本地任务，然后对任务进行回溯。回溯机房：${fillback_region};回溯周期：${fillback_date};回溯并发：${fillback_num}`;
+                let { clarificationKnowledge, clarificationSkill, clarificationRequirement } = form;
+                clarificationKnowledge = clarificationKnowledge || "";
+                clarificationSkill = clarificationSkill || "";
+                clarificationRequirement = clarificationRequirement || "";
+                let content = `澄清知识库：${clarificationKnowledge}；澄清Skill：${clarificationSkill}；澄清要求：${clarificationRequirement}`;
                 return content;
             }
         },
@@ -146,13 +149,16 @@
             sceneName: "模型设计",
             desc: `按照当前任务设计模型`,
             inputs: [
-                { key: "fillback_region", label: "澄清知识库", type: "checkbox", options: ["多人", "公会", "活动", "游戏"] },
-                { key: "fillback_date", label: "设计日期" },
-                { key: "fillback_num", label: "设计并发" }
+                { key: "model_designKnowledge", label: "设计知识库", type: "checkbox", options: ["多人", "公会", "活动", "游戏"] },
+                { key: "model_designSkill", label: "设计Skill", type: "checkbox", options: ["多人", "公会", "活动", "游戏"] },
+                { key: "model_designRequirement", label: "设计要求" }
             ],
             buildText: function(form) {
-                let { fillback_region, fillback_date, fillback_num } = form;
-                let content = `任务：你需要根据当前Global任务去定位对应的va、sg、US-EastRed、US- TTP的本地任务，然后对任务进行回溯。回溯机房：${fillback_region};回溯周期：${fillback_date};回溯并发：${fillback_num}`;
+                let { model_designKnowledge, model_designSkill, model_designRequirement } = form;
+                model_designKnowledge = model_designKnowledge || "";
+                model_designSkill = model_designSkill || "";
+                model_designRequirement = model_designRequirement || "";
+                let content = `设计知识库：${model_designKnowledge}；设计Skill：${model_designSkill}；设计要求：${model_designRequirement}`;
                 return content;
             }
         },
@@ -170,37 +176,6 @@
             }
         },
 
-//         optimize_param: {
-//             sceneName: "参数优化",
-//             desc: `使用 novel-optimize-sql 优化任务参数，不修改任务逻辑。`,
-//             inputs: [],
-//             buildText: function() {
-//                 return `参数优化：使用 novel-optimize-sql 优化任务参数，不要修改任务逻辑。`;
-//             }
-//         },
-
-//         optimize_logic: {
-//             sceneName: "逻辑优化",
-//             desc: `使用 novel-optimize-sql 优化任务逻辑，保证语义完全一致。`,
-//             inputs: [],
-//             buildText: function() {
-//                 return `逻辑优化：使用 novel-optimize-sql 优化任务逻辑，需要确保修改前后，代码语义完全一致。`;
-//             }
-//         },
-
-//         aeolus_to_hive: {
-//             sceneName: "风神数据集逻辑落表",
-//             desc: `使用 toufan-aeolus-sql-to-hiv，将风神数据集逻辑落Hive表。需要：数据集链接、目标表名、任务名。`,
-//             inputs: [
-//                 { key: "aeolusUrl", label: "风神数据集任务链接" },
-//                 { key: "hiveTable", label: "Hive表名(库名.表名)" },
-//                 { key: "taskName", label: "任务名称" }
-//             ],
-//             buildText: function(form) {
-//                 let { aeolusUrl, hiveTable, taskName } = form;
-//                 return `风神数据集逻辑落表：使用 toufan-aeolus-sql-to-hiv，将风神数据集${aeolusUrl}的逻辑，落一个hive表，表名称是${hiveTable}，任务名称是${taskName}。`;
-//             }
-//         },
 
 //         full_code_format: {
 //             sceneName: "整体代码格式化",
@@ -255,6 +230,77 @@
                 return content;
             }
         },
+        //Tesoro配置
+        create_tesoro_api: {
+            sceneName: "新建Tesoro接口",
+            desc: `调用 tesoro-indicator-dev skill 创建离线指标接口。
+按业务对象、粒度、接口类型、指标口径、入参出参等信息完成接口创建。`,
+            inputs: [
+                { key: "itemType", label: "业务对象(可不填)", type: "select", options: ["User", "Anchor", "Room", "Faction", "Principal", "Agent", "Operator", "FactionAnchor", "AnchorGift", "AnchorLiveType", "UserAnchor", "UserRoom", "FactionAgent", "FactionOperator", "UserGift", "Video", "AnchorAbnormalAction", "Total", "PlatformGroup", "FactionPlatformGroup"] },
+                { key: "granularity", label: "粒度(可不填)" },
+                { key: "apiType", label: "接口类型偏好", type: "select", options: ["stats", "Retrieve"] },
+                { key: "metricDesc", label: "指标口径说明" },
+                { key: "inputParams", label: "入参" },
+                { key: "outputParams", label: "出参" },
+                { key: "wiki", label: "知识库(可不填)" },
+                { key: "deployRegion", label: "接口部署机房", type: "select", options: ["SG", "EU", "US"] },
+                { key: "owner", label: "Owner" },
+                { key: "ttl", label: "TTL/expire" }
+            ],
+            buildText: function(form) {
+                let { itemType, granularity, apiType, metricDesc, inputParams, outputParams, wiki, deployRegion, owner, ttl } = form;
+                let content = `帮我调用tesoro-indicator-dev skill\n需求：创建接口\n`;
+                content += `ItemType：${itemType}\n`;
+                content += `粒度：${granularity}\n`;
+                content += `离线/实时：Offline\n`;
+                content += `接口类型偏好：${apiType}\n`;
+                content += `指标口径说明：${metricDesc}\n`;
+                content += `入参：${inputParams}\n`;
+                content += `出参：${outputParams}\n`;
+                content += `知识库：${wiki}\n`;
+                content += `部署 Region：SG\n`;
+                content += `storage：${deployRegion}\n`;
+                content += `Owner：${owner}\n`;
+                content += `TTL / expire：${ttl}\n`;
+                content += `是否需要 Task Monitor：是`;
+                return content;
+            }
+        },
+
+        //DECC场景配置
+        create_cross_region: {
+            sceneName: "新建Cross-Region场景",
+            desc: `调用 tesoro-indicator-dev skill 创建完整 GlobalETL 跨区域链路。
+按 local 表、涉及源机房、传输方式、detect_uv、Decc 表等信息完成创建。`,
+            inputs: [
+                { key: "localTable", label: "local表名" },
+                { key: "sourceRegion", label: "涉及源机房", type: "select", options: ["SG", "EU", "US"] },
+                { key: "transferMode", label: "传输方式", type: "select", options: ["Agg有损传输", "Default无损传输"] },
+                { key: "detectUv", label: "detect_uv字段名(可不填)" },
+                { key: "deccTable", label: "Decc表名" }
+            ],
+            buildText: function(form) {
+                let { localTable, sourceRegion, transferMode, detectUv, deccTable } = form;
+                let content = `帮我调用tesoro-indicator-dev skill\n`;
+                content += `基于${localTable}创建完整 GlobalETL 跨区域链路，覆盖${sourceRegion}区域，使用${transferMode}，detect_uv为${detectUv}。使用Decc表为${deccTable}。`;
+                return content;
+            }
+        },
+
+        edit_cross_region: {
+            sceneName: "修改Cross-Region场景",
+            desc: `基于 local 表迭代完整 GlobalETL 跨区域链路，新增字段。`,
+            inputs: [
+                { key: "localTable", label: "local表名" },
+                { key: "newField", label: "新增字段名(对应字段类型)" },
+                { key: "deccTable", label: "decc表名" }
+            ],
+            buildText: function(form) {
+                let { localTable, newField, deccTable } = form;
+                return `基于${localTable}表迭代完整 GlobalETL 跨区域链路，新增字段${newField}，decc表为${deccTable}。`;
+            }
+        },
+        //任务运维部分
         create_fill_back: {
             sceneName: "创建回溯任务",
             desc: `按照当前任务创建回溯任务`,
@@ -279,15 +325,19 @@
         },
         {
             groupName: "数据开发",
-            keys: ["mysql2hive","hive_edit_caliber", "copy_exist_task", "aeolus_to_hive", "hive_add_column", "create_hive_sql_task"]
+            keys: ["mysql2hive", "larksheet2hive", "hive_edit_caliber", "copy_exist_task", "hive_add_column", "create_hive_sql_task", "format_code"]
         },
         {
             groupName: "任务运维",
             keys: ["create_fill_back"]
         },
         {
+            groupName: "Tesoro场景",
+            keys: ["create_tesoro_api"]
+        },
+        {
             groupName: "DECC场景",
-            keys: []
+            keys: ["create_cross_region", "edit_cross_region"]
         },
     ];
 
@@ -516,6 +566,12 @@
                     `<label style="margin-right:8px;cursor:pointer;display:inline-flex;align-items:center;gap:3px;font-size:13px;white-space:nowrap;"><input type="checkbox" class="pe-checkbox-item" data-key="${item.key}" value="${opt}" style="cursor:pointer;margin:0;"> ${opt}</label>`
                 ).join('');
                 div.innerHTML = `<label>${item.label}：</label><div style="flex:1;display:flex;flex-wrap:nowrap;align-items:center;">${checkboxes}</div>`;
+            } else if (item.type === 'select' && item.options) {
+                // 单选下拉框
+                const opts = ['<option value="">请选择</option>'].concat(
+                    item.options.map(opt => `<option value="${opt}">${opt}</option>`)
+                ).join('');
+                div.innerHTML = `<label>${item.label}：</label><select class="pe-select-item" data-key="${item.key}" style="flex:1;padding:7px 10px;border:1px solid ${themeVars.selectBorder};border-radius:4px;background:${themeVars.selectBg};color:${themeVars.selectColor};outline:none;">${opts}</select>`;
             } else {
                 div.innerHTML = `<label>${item.label}：</label><input type="text" class="pe-input-item" data-key="${item.key}">`;
             }
@@ -530,6 +586,9 @@
         const inputs = document.querySelectorAll('.pe-input-item');
         const data = {};
         inputs.forEach(i => data[i.dataset.key] = i.value.trim());
+        // 收集 select 单选值
+        const selects = document.querySelectorAll('.pe-select-item');
+        selects.forEach(s => data[s.dataset.key] = s.value.trim());
         // 收集 checkbox 多选值
         const checkboxes = document.querySelectorAll('.pe-checkbox-item:checked');
         checkboxes.forEach(cb => {
