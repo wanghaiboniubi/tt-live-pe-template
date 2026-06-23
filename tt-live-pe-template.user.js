@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         tt-live-pe-template
 // @namespace    pe-template-inner
-// @version      1.3
+// @version      1.4
 // @description  PE模板工具
 // @author       whb
 // @match        https://data.bytedance.net/dorado/*
@@ -274,7 +274,7 @@
 按 local 表、涉及源机房、传输方式、detect_uv、Decc 表等信息完成创建。`,
             inputs: [
                 { key: "localTable", label: "local表名" },
-                { key: "sourceRegion", label: "涉及源机房", type: "checkbox", options: ["SG", "EU", "US"] },
+                { key: "sourceRegion", label: "涉及源机房", type: "multiselect", options: ["SG", "EU", "US"] },
                 { key: "transferMode", label: "传输方式", type: "select", options: ["Agg有损传输", "Default无损传输"] },
                 { key: "detectUv", label: "detect_uv字段名(可不填)" },
                 { key: "deccTable", label: "Decc表名" }
@@ -455,6 +455,42 @@
         #pe-generate-btn {
             margin-top:10px;
         }
+        /* 自定义多选下拉框 */
+        .pe-ms {
+            position:relative;flex:1;
+        }
+        .pe-ms-control {
+            display:flex;align-items:center;justify-content:space-between;gap:6px;
+            min-height:34px;padding:5px 10px;border:1px solid ${themeVars.selectBorder};border-radius:4px;
+            background:${themeVars.selectBg};color:${themeVars.selectColor};cursor:pointer;font-size:13px;box-sizing:border-box;
+        }
+        .pe-ms-control .pe-ms-placeholder {
+            color:${themeVars.descColor};
+        }
+        .pe-ms-arrow {
+            border:solid ${themeVars.selectColor};border-width:0 1.5px 1.5px 0;display:inline-block;padding:3px;
+            transform:rotate(45deg);transition:transform .15s;flex:none;
+        }
+        .pe-ms.open .pe-ms-arrow {
+            transform:rotate(-135deg);
+        }
+        .pe-ms-panel {
+            display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:100001;
+            background:${themeVars.selectBg};border:1px solid ${themeVars.selectBorder};border-radius:4px;
+            box-shadow:0 4px 12px ${themeVars.shadowColor};max-height:200px;overflow-y:auto;padding:4px 0;
+        }
+        .pe-ms.open .pe-ms-panel {
+            display:block;
+        }
+        .pe-ms-option {
+            display:flex;align-items:center;gap:8px;padding:7px 12px;cursor:pointer;font-size:13px;color:${themeVars.selectColor};
+        }
+        .pe-ms-option:hover {
+            background:${themeVars.descBg};
+        }
+        .pe-ms-option input {
+            flex:none;width:auto;margin:0;padding:0;cursor:pointer;
+        }
         /* Aide 站点 PE 按钮样式 - 与 GPT-5.5 按钮风格一致 */
         .pe-aide-btn {
             display: inline-flex;
@@ -560,7 +596,17 @@
         info.inputs.forEach(item => {
             const div = document.createElement('div');
             div.className = 'pe-form-item';
-            if (item.type === 'checkbox' && item.options) {
+            if (item.type === 'multiselect' && item.options) {
+                // 自定义多选下拉框
+                const optsHtml = item.options.map(opt =>
+                    `<label class="pe-ms-option"><input type="checkbox" class="pe-ms-item" data-key="${item.key}" value="${opt}"> ${opt}</label>`
+                ).join('');
+                div.innerHTML = `<label>${item.label}：</label>` +
+                    `<div class="pe-ms" data-key="${item.key}">` +
+                        `<div class="pe-ms-control"><span class="pe-ms-text"><span class="pe-ms-placeholder">请选择</span></span><i class="pe-ms-arrow"></i></div>` +
+                        `<div class="pe-ms-panel">${optsHtml}</div>` +
+                    `</div>`;
+            } else if (item.type === 'checkbox' && item.options) {
                 // 多选 checkbox - 紧凑单行排列
                 const checkboxes = item.options.map(opt =>
                     `<label style="margin-right:8px;cursor:pointer;display:inline-flex;align-items:center;gap:3px;font-size:13px;white-space:nowrap;"><input type="checkbox" class="pe-checkbox-item" data-key="${item.key}" value="${opt}" style="cursor:pointer;margin:0;"> ${opt}</label>`
@@ -577,7 +623,28 @@
             }
             formWrap.appendChild(div);
         });
+        // 绑定自定义多选下拉框交互
+        formWrap.querySelectorAll('.pe-ms').forEach(ms => {
+            const control = ms.querySelector('.pe-ms-control');
+            const textDom = ms.querySelector('.pe-ms-text');
+            control.addEventListener('click', () => ms.classList.toggle('open'));
+            ms.querySelectorAll('.pe-ms-item').forEach(cb => {
+                cb.addEventListener('change', () => {
+                    const selected = Array.from(ms.querySelectorAll('.pe-ms-item:checked')).map(i => i.value);
+                    textDom.innerHTML = selected.length
+                        ? selected.join('、')
+                        : '<span class="pe-ms-placeholder">请选择</span>';
+                });
+            });
+        });
     };
+
+    // 点击外部关闭所有多选下拉框
+    document.addEventListener('click', (e) => {
+        document.querySelectorAll('.pe-ms.open').forEach(ms => {
+            if (!ms.contains(e.target)) ms.classList.remove('open');
+        });
+    });
 
     // 生成提示词（预览）
     document.getElementById('pe-generate-btn').onclick = function() {
@@ -592,6 +659,12 @@
         // 收集 checkbox 多选值
         const checkboxes = document.querySelectorAll('.pe-checkbox-item:checked');
         checkboxes.forEach(cb => {
+            const k = cb.dataset.key;
+            data[k] = data[k] ? data[k] + '、' + cb.value : cb.value;
+        });
+        // 收集自定义多选下拉框值
+        const msItems = document.querySelectorAll('.pe-ms-item:checked');
+        msItems.forEach(cb => {
             const k = cb.dataset.key;
             data[k] = data[k] ? data[k] + '、' + cb.value : cb.value;
         });
