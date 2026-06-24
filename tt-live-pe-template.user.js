@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         tt-live-pe-template
 // @namespace    pe-template-inner
-// @version      1.4
+// @version      1.5
 // @description  PE模板工具
 // @author       whb
 // @match        https://data.bytedance.net/dorado/*
@@ -305,13 +305,19 @@
             sceneName: "创建回溯任务",
             desc: `按照当前任务创建回溯任务`,
             inputs: [
+                { key: "fillback_task", label: "待回溯任务名/ID(可不填)" },
                 { key: "fillback_region", label: "回溯机房", type: "checkbox", options: ["va", "sg", "US-EastRed", "US-TTP"] },
                 { key: "fillback_date", label: "回溯日期" },
-                { key: "fillback_num", label: "回溯并发" }
+                { key: "fillback_num", label: "回溯并发" },
+                { key: "fillback_dep", label: "是否依赖上游", type: "select", options: ["是", "否"] }
             ],
             buildText: function(form) {
-                let { fillback_region, fillback_date, fillback_num } = form;
-                let content = `任务：你需要根据当前Global任务去定位对应的va、sg、US-EastRed、US- TTP的本地任务，然后对任务进行回溯。回溯机房：${fillback_region};回溯周期：${fillback_date};回溯并发：${fillback_num}`;
+                let { fillback_task, fillback_region, fillback_date, fillback_num, fillback_dep } = form;
+                const taskDesc = (fillback_task && fillback_task.trim())
+                    ? `待回溯任务为：${fillback_task.trim()}`
+                    : `待回溯任务默认为当前任务`;
+                const depDesc = (fillback_dep === '否') ? '不依赖上游' : '依赖上游';
+                let content = `任务：你需要根据当前Global任务去定位对应的va、sg、US-EastRed、US- TTP的本地任务，然后对任务进行回溯。${taskDesc}；回溯机房：${fillback_region};回溯周期：${fillback_date};回溯并发：${fillback_num};回溯任务${depDesc}`;
                 return content;
             }
         }

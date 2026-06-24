@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         tt-live-pe-template
 // @namespace    pe-template-inner
-// @version      1.4
+// @version      1.5
 // @description  PE模板工具
 // @author       whb
 // @match        https://data.bytedance.net/dorado/*
