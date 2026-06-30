@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         tt-live-pe-template
 // @namespace    pe-template-inner
-// @version      1.5
+// @version      1.6
 // @description  PE模板工具
 // @author       whb
 // @match        https://data.bytedance.net/dorado/*
@@ -270,26 +270,32 @@
         //DECC场景配置
         create_cross_region: {
             sceneName: "新建Cross-Region场景",
-            desc: `调用 tesoro-indicator-dev skill 创建完整 GlobalETL 跨区域链路。
-按 local 表、涉及源机房、传输方式、detect_uv、Decc 表等信息完成创建。`,
+            desc: `调用 DataGenie-global-etl-dev skill 创建完整 GlobalETL 跨区域链路。
+按 local 表、中心机房、涉及源机房、传输方式、detect_uv、Decc 表等信息完成创建。`,
             inputs: [
                 { key: "localTable", label: "local表名" },
+                { key: "centerRegion", label: "中心机房", type: "select", options: ["SG", "EU", "US"] },
                 { key: "sourceRegion", label: "涉及源机房", type: "multiselect", options: ["SG", "EU", "US"] },
                 { key: "transferMode", label: "传输方式", type: "select", options: ["Agg有损传输", "Default无损传输"] },
                 { key: "detectUv", label: "detect_uv字段名(可不填)" },
                 { key: "deccTable", label: "Decc表名" }
             ],
             buildText: function(form) {
-                let { localTable, sourceRegion, transferMode, detectUv, deccTable } = form;
-                let content = `帮我调用tesoro-indicator-dev skill\n`;
-                content += `基于${localTable}创建完整 GlobalETL 跨区域链路，覆盖${sourceRegion}区域，使用${transferMode}，detect_uv为${detectUv}。使用Decc表为${deccTable}。`;
+                let { localTable, centerRegion, sourceRegion, transferMode, detectUv, deccTable } = form;
+                let content = `帮我调用DataGenie-global-etl-dev skill\n`;
+                content += `基于${localTable}创建完整 GlobalETL 跨区域链路\n`;
+                content += `中心机房：${centerRegion}\n`;
+                content += `覆盖${sourceRegion}区域\n`;
+                content += `使用${transferMode}\n`;
+                content += `detect_uv为${detectUv}\n`;
+                content += `使用Decc表为${deccTable}`;
                 return content;
             }
         },
 
         edit_cross_region: {
             sceneName: "修改Cross-Region场景",
-            desc: `基于 local 表迭代完整 GlobalETL 跨区域链路，新增字段。`,
+            desc: `调用 DataGenie-global-etl-dev skill 基于 local 表迭代完整 GlobalETL 跨区域链路，新增字段。`,
             inputs: [
                 { key: "localTable", label: "local表名" },
                 { key: "newField", label: "新增字段名(对应字段类型)" },
@@ -297,7 +303,11 @@
             ],
             buildText: function(form) {
                 let { localTable, newField, deccTable } = form;
-                return `基于${localTable}表迭代完整 GlobalETL 跨区域链路，新增字段${newField}，decc表为${deccTable}。`;
+                let content = `帮我调用DataGenie-global-etl-dev skill\n`;
+                content += `基于${localTable}表迭代完整 GlobalETL 跨区域链路\n`;
+                content += `新增字段${newField}\n`;
+                content += `decc表为${deccTable}`;
+                return content;
             }
         },
         //任务运维部分
